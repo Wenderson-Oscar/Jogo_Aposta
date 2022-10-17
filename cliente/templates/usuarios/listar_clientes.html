@@ -1,0 +1,45 @@
+{% extends 'usuarios/base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <br>
+    <h3>Hello, Mr {{user.username}}</h3>
+    <a href="{% url 'logout_usuario' %}">Sair</a>
+{% else %}
+    <br>
+    <p>Você precisa realiar o login</p>
+{% endif %}
+<main class="container">
+    <div class="bg-light p-5 rounded">
+        {% if user.is_authenticated %}
+            {% for cliente in clientes %}
+                <tr>
+                    <td>
+                        Nome: {{cliente.nome}}<br>
+                        Sexo: {{cliente.sexo}}<br>
+                        Nascimento: {{cliente.nascimento}}<br>
+                        Email: {{cliente.email}}<br>
+                        {% for cliente in carteira %}
+                            {{cliente.carteira.objects.all}}
+                        {% endfor %}
+                        {% for nome in cliente.carteira.all %}
+                            {{nome}}
+                        {% endfor %}
+                    </td>
+                        <td>
+                            <a class="btn btn-default" href="{% url 'carteira_cliente' id=cliente.id %}">
+                                <button type="button" class="btn btn-danger">Carteira</button>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-default" href="{% url 'editar_cliente' id=cliente.id %}">
+                                <button type="button" class="btn btn-danger">Editar</button>
+                            </a>
+                            <br>
+                        </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
