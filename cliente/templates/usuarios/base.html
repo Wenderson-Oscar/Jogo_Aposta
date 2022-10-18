@@ -18,14 +18,21 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cadastrar_cliente' %}">Cadastrar Cliente</a>
+                        <a class="nav-link" href="{% url 'create_user' %}">Cadastrar Cliente</a>
                     </li>
+                    {% if user.is_superuser %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'listar_clientes' %}">Listar Cliente</a>
                     </li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'perfil' %}">Perfil</a>
+                    </li>
+                    {% endif %}
                 </ul>
                 <ul class="nav justify-content-end">
                     <li class="nav-item">

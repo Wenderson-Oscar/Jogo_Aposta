@@ -1,7 +1,7 @@
 {% extends 'usuarios/base.html' %}
 
 {% block content %}
-{% if user.is_superuser %}
+{% if user.is_authenticated %}
     <br>
     <h3>Hello, Mr {{user.username}}</h3>
 {% else %}
@@ -10,8 +10,7 @@
 {% endif %}
 <main class="container">
     <div class="bg-light p-5 rounded">
-        {% if user.is_superuser %}
-            {% for cliente in cliente %}
+        {% if user.is_authenticated %}
                 <tr>
                     <td>
                         Nome: {{cliente.nome}}<br>
@@ -20,19 +19,18 @@
                         Email: {{cliente.email}}<br>
                         Carteira: {{cliente.carteira.carteira}}<br>
                     </td>
-                        <td>
-                            <a class="btn btn-default" href="{% url 'carteira_cliente' id=cliente.id %}">
-                                <button type="button" class="btn btn-danger">Carteira</button>
-                            </a>
-                        </td>
-                        <td>
+                        <td> 
                             <a class="btn btn-default" href="{% url 'editar_cliente' id=cliente.id %}">
                                 <button type="button" class="btn btn-danger">Editar</button>
                             </a>
-                            <br>
+                        </td>
+                        <td>
+                            <a class="btn btn-default" href="{% url 'carteira_cliente' id=cliente.id %}">
+                                <button type="button" class="btn btn-danger">Carteira</button>
+                                <br>
+                            </a>
                         </td>
                 </tr>
-            {% endfor %}
         {% endif %}
     </div>
 </main>

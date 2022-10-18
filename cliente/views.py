@@ -1,8 +1,23 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from cliente.models import Cliente, Carteira
-from cliente.forms import Formulario, Formulario_Carteira
-from django.contrib.auth import authenticate, login, logout
+from cliente.forms import Formulario, Formulario_Carteira, UserCreateForm
+from django.contrib.auth import authenticate, login, logout, authenticate
 # Create your views here.
+
+def create_user(request):
+    if request.method == 'POST':
+        form = UserCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('cadastrar_cliente')
+    else:
+        form = UserCreateForm()
+    return render(request, 'usuarios/form.html',{'form': form})
+
 
 def logout_usuario(request):
     logout(request)
@@ -16,7 +31,7 @@ def autenticar_usuario(request):
     if user is not None:
         login(request, user)
         cliente = Cliente.objects.all()
-        return render(request, 'usuarios/listar_clientes.html', {'clientes':cliente})
+        return render(request, 'usuarios/home.html', {'clientes':cliente})
     else:
         return render(request, 'usuarios/page_login.html',{})
 
@@ -28,7 +43,7 @@ def page_login(request):
 def carteira_cliente(request, id):
     clt_carteira = get_object_or_404(Carteira, pk=id)
     if request.method == "POST":
-        form = Formulario_Carteira(request.POST, request.FILES, instance=clt_carteira)
+        form = Formulario_Carteira(request.POST, request.FILES ,instance=clt_carteira)
         if form.is_valid():
             clt_carteira = form.save(commit=False)
             form.save()
@@ -53,14 +68,24 @@ def editar_cliente(request, id):
 
 def cadastrar_usuario(request):
     if request.method == "POST":
-        form = Formulario(request.POST, request.FILES)
+        form = Formulario(request.POST)
         if form.is_valid():
             cliente = form.save(commit=False)
+            cliente.user=request.user
+            cliente.save()
             form.save()
             return redirect('editar_cliente', id=cliente.id)
-    else:
+    else:                                                                                                                                                                                                                                                                                     
         form = Formulario()
-        return render(request, 'usuarios/form.html', {'form': form})
+    return render(request, 'usuarios/form.html', {'form': form})
+
+
+def perfil(request):
+    try:
+        cliente = Cliente.objects.get(user=request.user)
+    except Cliente.DoesNotExist:
+        return redirect('cadastrar_cliente')
+    return render(request, 'usuarios/detalhar_cliente.html', {'cliente': cliente})
 
 
 def home(request):
@@ -70,4 +95,4 @@ def home(request):
 
 def listar_cliente(request):
     cliente = Cliente.objects.all()
-    return render(request, 'usuarios/listar_clientes.html', {'clientes': cliente})
+    return render(request, 'usuarios/listar_clientes.html', {'cliente': cliente})
