@@ -1,8 +1,36 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from cliente.models import Cliente, Carteira
+from cliente.models import Cliente, Carteira, MegaSena
 from cliente.forms import Formulario, Formulario_Carteira, UserCreateForm
-from django.contrib.auth import authenticate, login, logout, authenticate
+from django.contrib.auth import authenticate, login, logout
+from random import sample
+from datetime import date
 # Create your views here.
+
+def premiu(request):
+    """sorteado: lógica da loteria 
+    bd: salvando no banco
+    resultado: comparando as listar"""
+    sorteado = sample(range(1, 61), 6)
+    bd = MegaSena(sorteio=str(sorteado), data=date.today())
+    bd.save()
+    if request.method == "POST":
+        bilhetes(request)
+        resultado = set(map(str, sorteado)) & set(fusao)
+    return render(request, 'usuarios/loteria.html', {'sorteado': sorteado, 'bilhetes': fusao, 'resultado': resultado})
+
+
+def bilhetes(request):
+    global fusao
+    if request.method == "POST":
+        bilhete0 = request.POST.get('number', None)
+        bilhete1 = request.POST.get('number1', None)
+        bilhete2 = request.POST.get('number2', None)
+        bilhete3 = request.POST.get('number3', None)
+        bilhete4 = request.POST.get('number4', None)
+        bilhete5 = request.POST.get('number5', None)
+        fusao = [bilhete0, bilhete1, bilhete2, bilhete3, bilhete4, bilhete5]
+    return render(request, 'usuarios/bilhete.html')
+
 
 def create_user(request):
     if request.method == 'POST':

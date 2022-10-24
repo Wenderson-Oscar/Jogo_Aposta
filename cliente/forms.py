@@ -1,5 +1,5 @@
 from django import forms
-from cliente.models import Cliente, Carteira
+from cliente.models import Cliente, Carteira, MegaSena
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
