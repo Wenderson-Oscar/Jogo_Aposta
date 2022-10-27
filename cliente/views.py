@@ -1,3 +1,5 @@
+from array import array
+from this import s
 from django.shortcuts import redirect, render, get_object_or_404
 from cliente.models import Cliente, Carteira, MegaSena, JogoBicho
 from cliente.forms import Formulario, Formulario_Carteira, UserCreateForm, EscolhaBicho
@@ -10,13 +12,13 @@ def premiu_bichos(request):
     """Lógica do bicho"""
     sort = sample(range(0, 100), 2)
     sort.reverse()
-    a = []
+    result = []
     escolhar_bichos(request)
     for x in sort:
         for y in select_bichos:
             if str(x) in y:
-                a.append(x)
-    return render(request, 'usuarios/result_bichos.html', {'sorteado': sort,'bilhetes': select_bichos, 'resultado': a})
+                result.append(x)
+    return render(request, 'usuarios/result_bichos.html', {'sorteado': sort,'bilhetes': select_bichos, 'resultado': result})
 
 
 def escolhar_bichos(request):
