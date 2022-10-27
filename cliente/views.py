@@ -1,10 +1,36 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from cliente.models import Cliente, Carteira, MegaSena
-from cliente.forms import Formulario, Formulario_Carteira, UserCreateForm
+from cliente.models import Cliente, Carteira, MegaSena, JogoBicho
+from cliente.forms import Formulario, Formulario_Carteira, UserCreateForm, EscolhaBicho
 from django.contrib.auth import authenticate, login, logout
 from random import sample
 from datetime import date
 # Create your views here.
+
+def premiu_bichos(request):
+    """Lógica do bicho"""
+    sort = sample(range(0, 100), 2)
+    sort.reverse()
+    a = []
+    escolhar_bichos(request)
+    for x in sort:
+        for y in select_bichos:
+            if str(x) in y:
+                a.append(x)
+    return render(request, 'usuarios/result_bichos.html', {'sorteado': sort,'bilhetes': select_bichos, 'resultado': a})
+
+
+def escolhar_bichos(request):
+    global select_bichos
+    if request.method == "POST":
+        form = EscolhaBicho(request.POST)
+        select_bichos = request.POST.getlist('bichos', None)
+        insert = JogoBicho.objects.create(bichos=select_bichos, data=date.today())
+        insert.save()
+        return redirect('result_bichos')
+    else:
+        form = EscolhaBicho()
+    return render(request, 'usuarios/form_bichos.html', {'form': form})
+
 
 def premiu(request):
     """sorteado: lógica da loteria 

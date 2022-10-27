@@ -1,0 +1,57 @@
+{% extends 'usuarios/base.html' %}
+
+{% block content %}
+    <br>
+    {% if user.is_authenticated %}
+        <h2>Escolha do Bicho</h2>
+        <form method="POST" class="table" enctype="multipart/form-data" action="">
+            {% csrf_token %}
+                <div class="form-group">
+                    {{ form.as_p }}
+                </div>
+                <a>
+                    <button type="submit" class="save btn btn-default">Comprar</button>
+                </a>
+        </form>
+    {% endif %}
+    <!-- Limitar a quantidade de escolha  -->
+    <style>label { display: block; }</style>
+    <script type="text/javascript">
+    (function(){
+        "use strict";
+
+        var marcados = 0;
+        var verifyCheckeds = function($checks) {
+            if( marcados>=2 ) {
+                loop($checks, function($element) {
+                    $element.disabled = $element.checked ? '' : 'disabled';
+                });
+            } else {
+                loop($checks, function($element) {
+                    $element.disabled = '';
+                });
+            }
+        };
+        var loop = function($elements, cb) {
+            var max = $elements.length;
+            while(max--) {
+                cb($elements[max]);
+            }
+        }
+        var count = function($element) {
+            return $element.checked ? marcados + 1 : marcados - 1;
+        }
+        window.onload = function(){
+            var $checks = document.querySelectorAll('input[type="checkbox"]');
+            loop($checks, function($element) {
+                $element.onclick = function(){
+                    marcados = count(this);
+                    verifyCheckeds($checks);
+                }
+                if($element.checked) marcados = marcados + 1;
+            });
+            verifyCheckeds($checks);
+        }
+    }());
+</script>
+{% endblock %}

@@ -14,4 +14,6 @@ urlpatterns = [
     path('perfil', views.perfil, name='perfil'),
     path('sorteado', views.premiu, name='sorteado'),
     path('bilhete', views.bilhetes, name='bilhete'),
+    path('bichos', views.escolhar_bichos, name='escolha_bichos'),
+    path('result_bichos', views.premiu_bichos, name='result_bichos'),
 ]

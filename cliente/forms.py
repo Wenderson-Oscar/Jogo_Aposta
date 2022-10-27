@@ -1,5 +1,5 @@
 from django import forms
-from cliente.models import Cliente, Carteira, MegaSena
+from cliente.models import Cliente, Carteira, JogoBicho
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -24,6 +24,7 @@ class Formulario(forms.ModelForm):
             'email': forms.EmailInput(attrs={ 'class': 'form-control'}),
         }
 
+
 class Formulario_Carteira(forms.ModelForm):
 
     class Meta:
@@ -32,4 +33,15 @@ class Formulario_Carteira(forms.ModelForm):
 
         widgets = {
             'carteira': forms.NumberInput(attrs={ 'class': 'form-control'}),
+        }
+
+
+class EscolhaBicho(forms.ModelForm):
+
+    class Meta:
+        model = JogoBicho
+        fields = ('bichos',)
+
+        widgets = {
+            'bichos': forms.CheckboxSelectMultiple(attrs={'class': 'form-control'}),
         }
