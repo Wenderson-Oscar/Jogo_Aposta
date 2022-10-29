@@ -1,7 +1,5 @@
-from array import array
-from this import s
 from django.shortcuts import redirect, render, get_object_or_404
-from cliente.models import Cliente, Carteira, MegaSena, JogoBicho
+from cliente.models import Cliente, Carteira, MegaSena, JogoBicho, PremiuBicho, BilheteClienteLoteria
 from cliente.forms import Formulario, Formulario_Carteira, UserCreateForm, EscolhaBicho
 from django.contrib.auth import authenticate, login, logout
 from random import sample
@@ -10,15 +8,27 @@ from datetime import date
 
 def premiu_bichos(request):
     """Lógica do bicho"""
-    sort = sample(range(0, 100), 2)
+    sort = sample(range(1, 10), 4)
     sort.reverse()
     result = []
     escolhar_bichos(request)
-    for x in sort:
+    #necessario para poder juntar os pares de números e comparar
+    valor1 = str(sort[0]) + "" + str(sort[1])
+    valor2 = str(sort[2]) + "" + str(sort[3])
+    juncao = [valor1, valor2]
+    #adicionando no model os dados
+    usuario = Cliente.objects.get(user__id=request.user.id)
+    insert = PremiuBicho.objects.create(bilheteclientebicho=juncao, data=date.today(), premiu_bilhete=usuario)
+    insert.save()
+    #lógica
+    for x in juncao:
         for y in select_bichos:
-            if str(x) in y:
+            if x in y:
                 result.append(x)
-    return render(request, 'usuarios/result_bichos.html', {'sorteado': sort,'bilhetes': select_bichos, 'resultado': result})
+    if len(result) <= 0:
+        result.append('ZEBRA')        
+    trat_premiu = ''.join(map(str,sort)).replace("'","")
+    return render(request, 'usuarios/result_bichos.html', {'sorteado': trat_premiu,'bilhetes': select_bichos, 'resultado': result})
 
 
 def escolhar_bichos(request):
@@ -26,7 +36,8 @@ def escolhar_bichos(request):
     if request.method == "POST":
         form = EscolhaBicho(request.POST)
         select_bichos = request.POST.getlist('bichos', None)
-        insert = JogoBicho.objects.create(bichos=select_bichos, data=date.today())
+        usuario = Cliente.objects.get(user__id=request.user.id)
+        insert = JogoBicho.objects.create(bichos=select_bichos, data=date.today(), bilhetecliente=usuario)
         insert.save()
         return redirect('result_bichos')
     else:
@@ -44,6 +55,10 @@ def premiu(request):
     if request.method == "POST":
         bilhetes(request)
         resultado = set(map(str, sorteado)) & set(fusao)
+        if len(resultado) == 0:
+            resultado = 'Nenhum Valor Compativel'
+        if sorteado in fusao:
+            resultado = "Você Ganhou"
     return render(request, 'usuarios/loteria.html', {'sorteado': sorteado, 'bilhetes': fusao, 'resultado': resultado})
 
 
@@ -57,10 +72,14 @@ def bilhetes(request):
         bilhete4 = request.POST.get('number4', None)
         bilhete5 = request.POST.get('number5', None)
         fusao = [bilhete0, bilhete1, bilhete2, bilhete3, bilhete4, bilhete5]
+        usuario = Cliente.objects.get(user__id=request.user.id)
+        inser_dados = BilheteClienteLoteria.objects.create(bilheteclientesena=fusao, data=date.today(), bilhete_cliente_mega=usuario)
+        inser_dados.save()
     return render(request, 'usuarios/bilhete.html')
 
 
 def create_user(request):
+    """create_carteira: relaciona o usuario com a carteira"""
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
         if form.is_valid():
@@ -69,6 +88,8 @@ def create_user(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
+            create_carteira = Carteira.objects.create(cliente=user)
+            create_carteira.save()
             return redirect('cadastrar_cliente')
     else:
         form = UserCreateForm()

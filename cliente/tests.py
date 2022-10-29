@@ -1,5 +1,7 @@
 from django.test import TestCase
 from random import sample
+import schedule
+import time
 # Create your tests here.
 
 def logica_loteria():
@@ -27,5 +29,3 @@ def premiu_bichos():
     resultado = set(sort) & set(escolha)
     print(f'Sorteado: {sort}\nEscolhido: {escolha}\nResultado: {resultado}')
 
-
-premiu_bichos()

@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-
 # Create your models here.
 
 class Cliente(models.Model):
@@ -10,12 +9,12 @@ class Cliente(models.Model):
         ("N", "Nenhuma das opções")
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100, null=False, blank=False)
     sexo = models.CharField(max_length=1, choices=SEXO_CHOICES, blank=False, null=False)
     nascimento = models.DateField(null=False, blank=False)
     email = models.EmailField(null=False, blank=False)
 
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nome
@@ -26,13 +25,13 @@ class Carteira(models.Model):
     carteira = models.FloatField(default=10)
     cliente = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
 
-
     """JOGOS"""
 
 class MegaSena(models.Model):
 
     data = models.DateField()
     sorteio = models.JSONField()
+    ganhador = models.ManyToManyField(User)
 
     def __str__(self):
         return f'{self.sorteio}'
@@ -71,7 +70,21 @@ class JogoBicho(models.Model):
 
     data = models.DateField()
     bichos = models.JSONField(choices = BICHOS)
-    ligacao = models.ManyToManyField(User)
+    bilhetecliente = models.OneToOneField(Cliente, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.bichos}'
+
+
+class BilheteClienteLoteria(models.Model):
+
+    bilheteclientesena = models.JSONField()
+    data = models.DateField()
+    bilhete_cliente_mega = models.OneToOneField(Cliente, on_delete=models.CASCADE)
+
+
+class PremiuBicho(models.Model):
+
+    bilheteclientebicho = models.JSONField()
+    data = models.DateField()
+    premiu_bilhete = models.OneToOneField(Cliente, on_delete=models.CASCADE)
