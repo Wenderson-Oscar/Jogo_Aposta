@@ -70,7 +70,7 @@ class JogoBicho(models.Model):
 
     data = models.DateField()
     bichos = models.JSONField(choices = BICHOS)
-    bilhetecliente = models.OneToOneField(Cliente, on_delete=models.CASCADE)
+    bilhetecliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.bichos}'
@@ -80,11 +80,11 @@ class BilheteClienteLoteria(models.Model):
 
     bilheteclientesena = models.JSONField()
     data = models.DateField()
-    bilhete_cliente_mega = models.OneToOneField(Cliente, on_delete=models.CASCADE)
+    bilhete_cliente_mega = models.ForeignKey(Cliente, on_delete=models.CASCADE)
 
 
 class PremiuBicho(models.Model):
 
     bilheteclientebicho = models.JSONField()
     data = models.DateField()
-    premiu_bilhete = models.OneToOneField(Cliente, on_delete=models.CASCADE)
+    premiu_bilhete = models.ForeignKey(Cliente, on_delete=models.CASCADE)

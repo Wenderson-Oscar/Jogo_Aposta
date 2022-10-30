@@ -32,6 +32,11 @@ def premiu_bichos(request):
 
 
 def escolhar_bichos(request):
+    """
+    global: necessaria para poder comparar em outra função
+    usuario: procurando o usuario logado
+    insert: inserindo os dados no banco
+    """
     global select_bichos
     if request.method == "POST":
         form = EscolhaBicho(request.POST)
