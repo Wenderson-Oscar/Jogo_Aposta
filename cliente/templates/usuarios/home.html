@@ -2,40 +2,77 @@
 
 {% block content %}
     <main >
+      <br>
+      <center>
+        <h1>Aposte é Ganhe Uma Bolada</h1>
+      </center>
         <br>
-        <div>
-            <center> <h3> Aposte e Ganhe uma Bolada </h3></center>
-        </div>
-            <tr>
+          <!-- START THE FEATURETTES -->
+          <hr class="featurette-divider">
+          <div class="row featurette">
+            <div class="col-md-7">
+              <h2 class="featurette-heading">Mega Sena</h2>
+              <p class="lead"> Loteria ou Mega Sena é uma forma de jogo que envolve o sorteio de números
+                aleatoriamente para um prêmio.
+                Para o sorteio dos 6 números da Mega-Sena é utilizado 1 globo, carregado com
+                bolas numeradas de 01 a 60.
+            </p>
+            </div>
+            <div class="col-md-5">
                 <a class="navbar-brand" href="{% url 'bilhete' %}">
                     <img height="300px" width="400px" src="/cliente/media/mega_sena.png">
-                        <button class="nav-item" type="submit">Apostar</button>
-                    </a>
-                    <figcaption>
-                        Loteria ou lotaria é uma forma de jogo que envolve o sorteio de números
-                        aleatoriamente para um prêmio.
-                        Para o sorteio dos 6 números da Mega-Sena é utilizado 1 globo, carregado com
-                        bolas numeradas de 01 a 60.
-                    </figcaption>
-            </tr>
-            <figure>
+                </a>
+            </div>
+          </div>
+  
+          <hr class="featurette-divider">
+  
+          <div class="row featurette">
+            <div class="col-md-7 order-md-2">
+              <h2 class="featurette-heading">Jogo do Bicho</h2>
+              <p class="lead">O jogo do bicho funciona com o sorteio de cinco pares de dezenas
+                entre 00 e 99, associadas a 25 animais diferentes. Se você escolheu essas
+                dezenas, leva o prêmio. A brincadeira foi criada em 1892 pelo barão João Batista
+                Viana Drummond, fundador do zoológico do Rio de Janeiro. No início, o zoológico
+                não era muito popular, então o jogo surgiu para incentivar as visitas e evitar que o
+                estabelecimento fechasse as portas.
+                Castor Gonçalves de Andrade e Silva foi um bicheiro e cartola brasileiro.
+                Castor de Andrade é até hoje o mais famoso bicheiro brasileiro. Era considerado um
+                "bicheiro romântico", já que não permitia que outros negócios ilícitos, como o tráfico
+                de drogas, fossem explorados junto com o jogo do bicho.
+            </p>
+            </div>
+            <div class="col-md-5 order-md-1">
                 <a class="navbar-brand" href="{% url 'escolha_bichos' %}">
                     <img height="300px" width="400px" src="/cliente/media/bicho_sena.jpg">
-                    <button class="nav-item" type="submit">Apostar</button>
-                </a>
-                <figcaption>
-                    O jogo do bicho funciona com o sorteio de cinco pares de dezenas
-                    entre 00 e 99, associadas a 25 animais diferentes. Se você escolheu essas
-                    dezenas, leva o prêmio. A brincadeira foi criada em 1892 pelo barão João Batista
-                    Viana Drummond, fundador do zoológico do Rio de Janeiro. No início, o zoológico
-                    não era muito popular, então o jogo surgiu para incentivar as visitas e evitar que o
-                    estabelecimento fechasse as portas.
-                    Castor Gonçalves de Andrade e Silva foi um bicheiro e cartola brasileiro.
-                    Castor de Andrade é até hoje o mais famoso bicheiro brasileiro. Era considerado um
-                    "bicheiro romântico", já que não permitia que outros negócios ilícitos, como o tráfico
-                    de drogas, fossem explorados junto com o jogo do bicho.
-                </figcaption>
-            </figure>
+                </a>            
+            </div>
+          </div>
 
+          <hr class="featurette-divider">
+  
+          <!-- /END THE FEATURETTES -->
+  
+        </div><!-- /.container -->
+  
+  
+        <!-- FOOTER -->
+        <footer class="container">
+          <p class="float-right"><a href="#">Back to top</a></p>
+        </footer>
+      </main>
+  
+      <!-- Bootstrap core JavaScript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+      <script src="../../assets/js/vendor/popper.min.js"></script>
+      <script src="../../dist/js/bootstrap.min.js"></script>
+      <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+      <script src="../../assets/js/vendor/holder.min.js"></script>
+    
+  
+  <svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500" preserveAspectRatio="none" style="display: none; visibility: hidden; position: absolute; top: -100%; left: -100%;"><defs><style type="text/css"></style></defs><text x="0" y="25" style="font-weight:bold;font-size:25pt;font-family:Arial, Helvetica, Open Sans, sans-serif">500x500</text></svg>
     </main>
 {% endblock %}
