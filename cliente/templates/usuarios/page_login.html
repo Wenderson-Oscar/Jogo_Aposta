@@ -12,5 +12,8 @@
             <input name="password" type="password" class="form-control" id="exampleInputPassword1">
         </div>
     <button type="submit" class="btn btn-primary">Login</button>
+    <a class="btn btn-default" href="{% url 'create_user' %}">
+        <button type="button" class="btn btn-danger">Cadastrar</button>
+    </a>
     </form>
 {% endblock %}

@@ -11,6 +11,7 @@ def premiu_bichos(request):
     sort = sample(range(1, 10), 4)
     sort.reverse()
     result = []
+    ganhador = []
     escolhar_bichos(request)
     #necessario para poder juntar os pares de números e comparar
     valor1 = str(sort[0]) + "" + str(sort[1])
@@ -20,15 +21,19 @@ def premiu_bichos(request):
     usuario = Cliente.objects.get(user__id=request.user.id)
     insert = PremiuBicho.objects.create(bilheteclientebicho=juncao, data=date.today(), premiu_bilhete=usuario)
     insert.save()
-    #lógica
+    #Lógica
     for x in juncao:
         for y in select_bichos:
             if x in y:
                 result.append(x)
+                if len(result) == 2:
+                    ganhador.append(insert.premiu_bilhete)
+    if len(result) >= 0 and len(result) <2:
+        ganhador.append("Sr Não Ganhou")
     if len(result) <= 0:
-        result.append('ZEBRA')        
+        result.append('ZEBRA')
     trat_premiu = ''.join(map(str,sort)).replace("'","")
-    return render(request, 'usuarios/result_bichos.html', {'sorteado': trat_premiu,'bilhetes': select_bichos, 'resultado': result})
+    return render(request, 'usuarios/result_bichos.html', {'sorteado': trat_premiu,'bilhetes': select_bichos, 'resultado': result, 'ganhador': ganhador})
 
 
 def escolhar_bichos(request):
@@ -36,6 +41,7 @@ def escolhar_bichos(request):
     global: necessaria para poder comparar em outra função
     usuario: procurando o usuario logado
     insert: inserindo os dados no banco
+    diminuir: descontar o valor do bilhete 
     """
     global select_bichos
     if request.method == "POST":
@@ -59,12 +65,14 @@ def premiu(request):
     bd.save()
     if request.method == "POST":
         bilhetes(request)
-        resultado = set(map(str, sorteado)) & set(fusao)
+        resultado = set(map(str,sorteado)) & set(fusao)
         if len(resultado) == 0:
             resultado = 'Nenhum Valor Compativel'
-        if sorteado in fusao:
-            resultado = "Você Ganhou"
-    return render(request, 'usuarios/loteria.html', {'sorteado': sorteado, 'bilhetes': fusao, 'resultado': resultado})
+        if len(resultado) == 6:
+            vencedor = "Sr Ganhou!"
+        else:
+            vencedor = "Não"
+    return render(request, 'usuarios/loteria.html', {'sorteado': sorteado, 'bilhetes': fusao, 'resultado': resultado, 'vencedor': vencedor})
 
 
 def bilhetes(request):

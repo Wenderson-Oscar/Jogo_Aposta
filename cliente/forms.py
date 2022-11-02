@@ -29,9 +29,10 @@ class Formulario_Carteira(forms.ModelForm):
 
     class Meta:
         model = Carteira
-        fields = ('carteira',)
+        fields = ('n_conta','carteira')
 
         widgets = {
+            'n_conta': forms.TextInput(attrs={ 'class': 'form-control'}),
             'carteira': forms.NumberInput(attrs={ 'class': 'form-control'}),
         }
 

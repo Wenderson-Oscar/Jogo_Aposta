@@ -22,7 +22,8 @@ class Cliente(models.Model):
 
 class Carteira(models.Model):
 
-    carteira = models.FloatField(default=10)
+    n_conta = models.CharField(max_length=50)
+    carteira = models.FloatField(default=0)
     cliente = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
 
     """JOGOS"""
